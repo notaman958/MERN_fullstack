@@ -4,7 +4,7 @@ const mongoose= require("mongoose");
 const ProfileSchema=new mongoose.Schema({
   user:{
     type: mongoose.Schema.Types.ObjectId, // connect with _id in User
-    ref="user" // User model
+    ref:"user" // User model
   },
   company:{
       type: String,

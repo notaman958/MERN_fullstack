@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const config = require("config");
 // express validator
-const { check, validationResult } = require("express-validator/check");
+const { check, validationResult } = require("express-validator");
 // require model for checking user input
 const User = require("../../models/User");
 // gravatar
