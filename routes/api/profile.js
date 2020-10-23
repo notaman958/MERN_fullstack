@@ -4,6 +4,8 @@ const Profile = require("../../models/profile");
 const auth = require("../../middleware/auth");
 const user = require("../../models/User");
 const { check, validationResult } = require("express-validator");
+
+//GET PROFILE ME
 //@ route       GET api/profile/me
 //@des         test route
 //@access      private
@@ -21,6 +23,8 @@ router.get("/me", auth, async (req, res) => {
     res.status(500).send("server error");
   }
 });
+
+//CREATE  AND UPDATE profile
 //@ route       POST api/profile/
 //@des         create or update user profile
 //@access      private
@@ -81,7 +85,38 @@ router.post(
       profile = new Profile(profileFields);
       await profile.save();
       res.json(profile);
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: "server error" });
+    }
   }
 );
+
+//GET ALL PROFILE
+//@ route       GET api/profile/
+//@des          get all profile
+//@access      public
+router.get("/", async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "server error" });
+  }
+});
+
+//GET ONE PROFILE WITH ID
+//@ route       GET api/profile/
+//@des          get all profile
+//@access      public
+router.get("/", async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate("user", ["name", "avatar"]);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "server error" });
+  }
+});
 module.exports = router;
