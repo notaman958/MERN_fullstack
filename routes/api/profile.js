@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Profile = require("../../models/Profile");
+const Profile = require("../../models/profile");
 const auth = require("../../middleware/auth");
 const user = require("../../models/User");
 const { check, validationResult } = require("express-validator");
@@ -79,7 +79,7 @@ router.post(
       }
       // create new
       profile = new Profile(profileFields);
-      await Profile.save();
+      await profile.save();
       res.json(profile);
     } catch (err) {}
   }
