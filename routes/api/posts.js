@@ -7,6 +7,7 @@ const { check, validationResult } = require("express-validator");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
 const Profile = require("../../models/profile");
+const { json } = require("body-parser");
 
 //@ route       POST api/posts
 //@des         create a post
@@ -173,7 +174,7 @@ router.post(
         avatar: user.avatar,
         user: req.user.id,
       };
-      post.comment.unshift(commentInstance);
+      post.comments.unshift(commentInstance);
       await post.save();
       res.json(post);
     } catch (err) {
@@ -183,4 +184,31 @@ router.post(
   }
 );
 
+//@ route      DELETE api/posts/comments/:id/:cmt_id // need both post id and cmt id
+//@des         remove a comment by cmt id + auth + post id
+//@access      private
+router.delete("/comments/:id/:cmt_id", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    // get comment
+    const comment = await post.comments.find(
+      (cmt) => cmt.id === req.params.cmt_id
+    ); // false or the comment
+    if (!comment) {
+      res.status(404).json({ msg: "Comment not found" });
+    }
+    // check user
+    if (comment.user.toString() !== req.user.id) {
+      res.status(401).json({ msg: "User not authorized" });
+    }
+    post.comments = post.comments.filter(
+      (cmt) => cmt.id.toString() !== req.params.cmt_id
+    );
+    await post.save();
+    res.json(post);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("server error");
+  }
+});
 module.exports = router;
