@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 // get Redux  alert here > to use have to connect in export
 import { setAlert } from "../../actions/alert";
 import { connect } from "react-redux";
+import { register } from "../../actions/auth";
 // layout/alert
 import PropTypes from "prop-types";
 
 // useState of Hook
-const Register = ({ setAlert }) => {
+const Register = ({ setAlert, register }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -29,6 +30,7 @@ const Register = ({ setAlert }) => {
       setAlert("Password not match", "danger"); // in App.css dynamic change the .alert-<danger|success|..>
       //   console.log("pwd not match");
     } else {
+      register({ name, email, password });
       //   //hold all the value fields
       //   const newUser = {
       //     name,
@@ -68,7 +70,7 @@ const Register = ({ setAlert }) => {
             value={name}
             /*call function onChange */
             onChange={(e) => onChange(e)}
-            required
+            /*required*/
           />
         </div>
         <div className="form-group">
@@ -79,7 +81,7 @@ const Register = ({ setAlert }) => {
             value={email}
             /*call function onChange */
             onChange={(e) => onChange(e)}
-            required /** need it */
+            /*required /** need it */
           />
           <small className="form-text">
             This site uses Gravatar so if you want a profile image, use a
@@ -94,7 +96,7 @@ const Register = ({ setAlert }) => {
             value={password}
             /*call function onChange */
             onChange={(e) => onChange(e)}
-            minLength="6"
+            /*minLength="6"*/
           />
         </div>
         <div className="form-group">
@@ -105,7 +107,7 @@ const Register = ({ setAlert }) => {
             value={password2}
             /*call function onChange */
             onChange={(e) => onChange(e)}
-            minLength="6"
+            /*minLength="6"*/
           />
         </div>
         <input type="submit" className="btn btn-primary" value="Register" />
@@ -117,6 +119,9 @@ const Register = ({ setAlert }) => {
   );
 };
 //
-Register.propTypes = { setAlert: PropTypes.func.isRequired };
+Register.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+};
 // first params of connect( state,object of actions )
-export default connect(null, { setAlert })(Register);
+export default connect(null, { setAlert, register })(Register);
