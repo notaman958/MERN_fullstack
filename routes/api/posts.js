@@ -60,7 +60,7 @@ router.get("/", auth, async (req, res) => {
 router.get("/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (!post || post.user.toString() !== req.user.id) {
+    if (!post) {
       return res.status(404).json({ msg: "post not found" });
     }
     res.json(post);
@@ -190,16 +190,17 @@ router.post(
 router.delete("/comments/:id/:cmt_id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ msg: "Post not found" });
     // get comment
     const comment = await post.comments.find(
       (cmt) => cmt.id === req.params.cmt_id
     ); // false or the comment
     if (!comment) {
-      res.status(404).json({ msg: "Comment not found" });
+      return res.status(404).json({ msg: "Comment not found" });
     }
     // check user
     if (comment.user.toString() !== req.user.id) {
-      res.status(401).json({ msg: "User not authorized" });
+      return res.status(401).json({ msg: "User not authorized" });
     }
     post.comments = post.comments.filter(
       (cmt) => cmt.id.toString() !== req.params.cmt_id
