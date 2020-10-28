@@ -1,15 +1,14 @@
 import React, { Fragment, useState } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 // get Redux  alert here > to use have to connect in export
-import { setAlert } from "../../actions/alert";
 import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
 import { register } from "../../actions/auth";
 // layout/alert
 import PropTypes from "prop-types";
 
 // useState of Hook
-const Register = ({ setAlert, register }) => {
+const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,6 +30,7 @@ const Register = ({ setAlert, register }) => {
       //   console.log("pwd not match");
     } else {
       register({ name, email, password });
+
       //   //hold all the value fields
       //   const newUser = {
       //     name,
@@ -52,6 +52,11 @@ const Register = ({ setAlert, register }) => {
       //   }
     }
   };
+  console.log(isAuthenticated);
+
+  if (isAuthenticated) {
+    return <Redirect to="/dashboard" />; // redirect from react
+  }
   return (
     <Fragment>
       <h1 className="large text-primary">Sign Up</h1>
@@ -122,6 +127,10 @@ const Register = ({ setAlert, register }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated, // if stop at auth get full of initState of reducers/auth.js
+});
 // first params of connect( state,object of actions )
-export default connect(null, { setAlert, register })(Register);
+export default connect(mapStateToProps, { setAlert, register })(Register);

@@ -6,6 +6,8 @@ import {
   AUTH_ERROR,
   LOGIN_FAIL,
   LOGIN_SUCCESS,
+  LOGOUT,
+  CLEAR_PROFILE,
 } from "./types";
 // to keep user login after register sucess
 //display errors
@@ -44,7 +46,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
       type: REGISTER_SUCCESS,
       payload: res.data,
     });
-    dispatch(loadUser());
+    dispatch(loadUser()); // loadUser() also here
   } catch (err) {
     const errors = err.response.data.errors;
     console.log(errors);
@@ -58,7 +60,7 @@ export const register = ({ name, email, password }) => async (dispatch) => {
 };
 
 // login user
-export const login = (email, password) => async (dispatch) => {
+export const login = ({ email, password }) => async (dispatch) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -72,7 +74,7 @@ export const login = (email, password) => async (dispatch) => {
       type: LOGIN_SUCCESS,
       payload: res.data,
     });
-    dispatch(loadUser());
+    dispatch(loadUser()); // loadUser also here
   } catch (err) {
     const errors = err.response.data.errors;
     console.log("CHECK " + errors);
@@ -83,4 +85,10 @@ export const login = (email, password) => async (dispatch) => {
       type: LOGIN_FAIL,
     });
   }
+};
+
+// logout / clear the profile
+export const logout = () => (dispatch) => {
+  dispatch({ type: CLEAR_PROFILE });
+  dispatch({ type: LOGOUT });
 };

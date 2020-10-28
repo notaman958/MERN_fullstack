@@ -5,12 +5,13 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
+  LOGOUT,
 } from "../actions/types";
 
 // store token in localStorage
 const initState = {
   token: localStorage.getItem("token"),
-  isAuthentication: null,
+  isAuthenticated: null,
   //check if loading is done and got the res
   loading: true, // false is when loading
   user: null,
@@ -22,7 +23,7 @@ export default function (state = initState, action) {
     case USER_LOADED:
       return {
         ...state,
-        isAuthentication: true,
+        isAuthenticated: true,
         loading: false,
         user: payload, // where to get username,email, avatar,
       };
@@ -32,17 +33,18 @@ export default function (state = initState, action) {
       return {
         ...state,
         ...payload,
-        isAuthentication: true,
+        isAuthenticated: true,
         loading: false,
       };
     case LOGIN_FAIL:
     case AUTH_ERROR:
     case REGISTER_FAIL:
+    case LOGOUT:
       localStorage.removeItem("token");
       return {
         ...state,
         token: null,
-        isAuthentication: false,
+        isAuthenticated: false,
         loading: false,
       };
     default:
