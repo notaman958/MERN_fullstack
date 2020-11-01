@@ -41,7 +41,7 @@ const CreateProfile = ({ createProfile, history }) => {
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     createProfile(formData, history);
   };

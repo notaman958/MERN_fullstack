@@ -17,7 +17,7 @@ const Login = ({ login, isAuthenticated }) => {
       [e.target.name]:
         e.target.value /*get name atttribute + set form prop value */,
     });
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault(); // no reload page
     login({ email, password });
   };

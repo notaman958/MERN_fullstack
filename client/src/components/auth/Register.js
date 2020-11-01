@@ -22,7 +22,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
       [e.target.name]:
         e.target.value /*get name atttribute + set form prop value */,
     });
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     if (password !== password2) {
       /*Where to link with redux alert */
