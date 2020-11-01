@@ -56,6 +56,11 @@ router.post(
       githubusername,
       skills,
       hobbies,
+      facebook,
+      instagram,
+      linkedin,
+      youtube,
+      twitter,
     } = req.body;
     // build profile object
     const profileFields = {};
@@ -69,8 +74,15 @@ router.post(
     if (githubusername) profileFields.githubusername = githubusername;
     if (skills)
       profileFields.skills = skills.split(",").map((skill) => skill.trim()); // cut word after , => trim space out of word
-    console.log(profileFields.skills);
-    if (hobbies) profileFields.hobbies = hobbies;
+    if (hobbies)
+      profileFields.hobbies = hobbies.split(",").map((hobby) => hobby.trim());
+    // build social obj
+    profileFields.social = {};
+    if (youtube) profileFields.social.youtube = youtube;
+    if (instagram) profileFields.social.instagram = instagram;
+    if (twitter) profileFields.social.twitter = twitter;
+    if (linkedin) profileFields.social.linkedin = linkedin;
+    if (facebook) profileFields.social.facebook = facebook;
     try {
       let profile = await Profile.findOne({ user: req.user.id });
       if (Profile) {
