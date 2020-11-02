@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
-import { loadUser } from "../../actions/auth";
 //pass component
 const PrivateRoute = ({
   component: Component,

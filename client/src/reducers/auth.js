@@ -6,6 +6,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  DELETE_ACCOUNT,
 } from "../actions/types";
 
 // store token in localStorage
@@ -39,6 +40,7 @@ export default function (state = initState, action) {
     case LOGIN_FAIL:
     case AUTH_ERROR:
     case REGISTER_FAIL:
+    case DELETE_ACCOUNT:
     case LOGOUT:
       localStorage.removeItem("token");
       return {

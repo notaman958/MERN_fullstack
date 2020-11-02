@@ -5,6 +5,7 @@ const auth = require("../../middleware/auth");
 const user = require("../../models/User");
 const { check, validationResult } = require("express-validator");
 const User = require("../../models/User");
+const Post = require("../../models/Post");
 // for git repos
 const request = require("request");
 const config = require("config");
@@ -85,7 +86,7 @@ router.post(
     if (facebook) profileFields.social.facebook = facebook;
     try {
       let profile = await Profile.findOne({ user: req.user.id });
-      if (Profile) {
+      if (profile) {
         //update
         profile = await Profile.findOneAndUpdate(
           { user: req.user.id },
@@ -127,11 +128,11 @@ router.get("/user/:user_id", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.params.user_id,
-    }).poppulate("user", ["name", "avatar"]);
+    }).populate("user", ["name", "avatar"]);
     if (!profile) {
       return res.status(400).json({ msg: "Profile not found" });
     }
-    res.json(profiles);
+    return res.json(profile);
   } catch (err) {
     console.error(err);
     if (err.kind == "ObjectId")
@@ -144,7 +145,7 @@ router.get("/user/:user_id", auth, async (req, res) => {
 //@ route       DELETE api/profile/
 //@des         delete prfile, user and posts
 //@access      private
-router.delete("/", async (req, res) => {
+router.delete("/", auth, async (req, res) => {
   try {
     // remove profile
     await Profile.findOneAndRemove({ user: req.user.id }); // model has field
@@ -152,7 +153,8 @@ router.delete("/", async (req, res) => {
     await User.findOneAndRemove({ _id: req.user.id }); // model has field _id
     // remove post
     // updated later
-
+    await Post.deleteMany({ user: req.user.id });
+    console.log("delete acc + profile + posts");
     res.json({ msg: "User removed" });
   } catch (err) {
     console.error(err);
@@ -179,14 +181,14 @@ router.put(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { title, company, from, to, current, decription } = req.body;
+    const { title, company, from, to, current, description } = req.body;
     const profileObj = {
       title,
       company,
       from,
       to,
       current,
-      decription,
+      description,
     };
     try {
       const profile = await Profile.findOne({ user: req.user.id });
@@ -288,7 +290,7 @@ router.put(
       from,
       to,
       current,
-      decription,
+      description,
     } = req.body;
     const profileObj = {
       school,
@@ -297,7 +299,7 @@ router.put(
       from,
       to,
       current,
-      decription,
+      description,
     };
     try {
       const profile = await Profile.findOne({ user: req.user.id });
