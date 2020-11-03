@@ -1,0 +1,6 @@
+{
+    "mongoURI":"mongodb+srv://admin:TonypasswOrd35147@mangadb.vbmiu.mongodb.net/mydb2?retryWrites=true&w=majority"
+    ,"jwt":"itsasecret"
+    , "githubClientID": "6126c85e108ad2ca4d0d"
+    , "githubPass":"f304fb7302eaf4002bb8538510da119f65e30d0f"
+}

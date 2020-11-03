@@ -176,7 +176,7 @@ router.post(
       };
       post.comments.unshift(commentInstance);
       await post.save();
-      res.json(post);
+      res.json(post.comments);
     } catch (err) {
       console.error(err.message);
       res.status(500).send("server error");
@@ -206,7 +206,7 @@ router.delete("/comments/:id/:cmt_id", auth, async (req, res) => {
       (cmt) => cmt.id.toString() !== req.params.cmt_id
     );
     await post.save();
-    res.json(post);
+    return res.json(post.comments);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("server error");
