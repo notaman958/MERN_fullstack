@@ -11,5 +11,6 @@ export const setAlert = (msg, alertType, timeout = 10000) => (dispatch) => {
     payload: { msg, alertType, id },
   });
   // timeout to faded away
+
   setTimeout(() => dispatch({ type: REMOVE_ALERT, payload: id }), timeout);
 };
